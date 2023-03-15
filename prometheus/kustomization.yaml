@@ -1,0 +1,11 @@
+resources:
+  - "prometheus-pv.yaml"
+  - "rbac.yaml"
+  - service.yaml
+patchesJson6902:
+  - target:
+      kind: "PersistentVolume"
+      version: "v1"
+      group: ""
+      name: prometheus-lpv-0
+    path: edit.yaml

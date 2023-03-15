@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-scheduler-cus # servce名字
+  namespace: kube-system
+spec:
+  selector:
+    component: kube-scheduler # pod选择器
+  type: ClusterIP
+  ports:
+    - name: kube-scheduler
+      protocol: TCP
+      port: 10259
+      targetPort: 10259 # pod端口是怎么来的？
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-controller-manager-cus # servce名字
+  namespace: kube-system
+spec:
+  selector:
+    component: kube-controller-manager # pod选择器
+  type: ClusterIP
+  ports:
+    - name: kube-controller-manager
+      protocol: TCP
+      port: 10257
+      targetPort: 10257 # pod端口是怎么来的？
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: etcd-cus # servce名字
+  namespace: kube-system
+spec:
+  selector:
+    component: etcd # pod选择器
+    tier: control-plane
+  type: ClusterIP
+  ports:
+    - name: etcd
+      protocol: TCP
+      port: 2379
+      targetPort: 2379 # pod端口是怎么来的？
+---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: kube-controller-manager-cus # servce名字
+#   namespace: kube-system
+# spec:
+#   selector:
+#     component: kube-controller-manager # pod选择器
+#   type: ClusterIP
+#   ports:
+#     - name: etcd
+#       protocol: TCP
+#       port: 2379
+#       targetPort: 2379 # pod端口是怎么来的？

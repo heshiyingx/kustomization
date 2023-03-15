@@ -1,0 +1,9 @@
+# 本地目录位置
+- op: replace
+  path: /spec/local/path
+  value: /data/prometheus
+
+# storeClass
+- op: replace
+  path: /spec/storageClassName
+  value: local-class

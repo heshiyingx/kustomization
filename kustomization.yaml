@@ -1,0 +1,4 @@
+resources:
+  - "storage_class/local" # 部署local-class
+  - "prometheus"
+  # - "storage_class/nfs" # 部署nfs-class

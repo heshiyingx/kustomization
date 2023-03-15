@@ -1,0 +1,11 @@
+resources:
+  - "nfs-class-provisioner.yaml"
+  - "nfs-class-rabc.yaml"
+  - "nfs-class.yaml"
+patchesJson6902:
+  - target:
+      kind: "Deployment"
+      version: "v1"
+      group: "apps"
+      name: nfs-client-provisioner
+    path: edit.yaml
