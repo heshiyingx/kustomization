@@ -19,9 +19,12 @@ rules:
   - apiGroups: [""] # "" indicates the core API group
     resources:
       - nodes
+      - nodes/metrics
+      - nodes/proxy
       - services
       - endpoints
       - pods
+      - pods/metrics
     verbs: ["get", "watch", "list"]
   - apiGroups:
       - "extensions"

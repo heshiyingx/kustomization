@@ -1,8 +1,11 @@
 resources:
+  - "kube-state-metrics-2.6.0"
+  - configmap.yaml
   - "prometheus-pv.yaml"
   - "rbac.yaml"
   - service.yaml
-  - configmap.yaml
+  - statefulsets.yaml
+  - ingress.yaml
 patchesJson6902:
   - target:
       kind: "PersistentVolume"
