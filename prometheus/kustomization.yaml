@@ -2,6 +2,7 @@ resources:
   - "prometheus-pv.yaml"
   - "rbac.yaml"
   - service.yaml
+  - configmap.yaml
 patchesJson6902:
   - target:
       kind: "PersistentVolume"
