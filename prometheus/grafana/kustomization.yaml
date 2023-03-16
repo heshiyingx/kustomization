@@ -1,0 +1,6 @@
+namespace: kube-devops
+resources:
+  - "deployment.yaml"
+  - "pv.yaml"
+  - service.yaml
+  - ingress.yaml
