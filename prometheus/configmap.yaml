@@ -19,7 +19,7 @@ data:
       relabel_configs:
       - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name]
         action: keep
-        regex: kube-system;kube-etcd
+        regex: kube-system;etcd-cus
       tls_config:
         ca_file: /etc/prometheus/secrets/etcd-certs/ca.crt
         cert_file: /etc/prometheus/secrets/etcd-certs/healthcheck-client.crt
