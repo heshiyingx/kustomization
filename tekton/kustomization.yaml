@@ -1,0 +1,4 @@
+resources:
+  - "interceptors-v0.23.0.yaml"
+  - "pipeline-v0.46.0.yaml"
+  - "trigger-v0.23.0.yaml"
