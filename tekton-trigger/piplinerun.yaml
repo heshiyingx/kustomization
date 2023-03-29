@@ -1,0 +1,28 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  # generateName: go-build-image-run-
+  name: go-build-image-run
+spec:
+  serviceAccountName: tekton-git-harbor-sa
+  pipelineRef:
+    name: go-build-image
+  params:
+    - name: git-url
+      value: https://gitlab.myshuju.top/goproject/user
+    - name: git-version
+      value: master
+    - name: image-name
+      value: harbor.myshuju.top/public/xxad:v0.1.5
+  workspaces:
+    - name: go-build-workspace
+      # emptyDir: {}
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+          volumeMode: Filesystem
+          storageClassName: nfs-client

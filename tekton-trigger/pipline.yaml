@@ -1,0 +1,47 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: go-build-image
+spec:
+  params:
+    - name: git-url # 默认string类型，所以不用指定type
+    - name: git-version
+    - name: image-name
+    # - name: dockerfilePath
+  workspaces:
+    - name: go-build-workspace
+  tasks:
+    - name: git-clone
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-version)
+      workspaces:
+        - name: output
+          workspace: go-build-workspace
+    - name: build-push-image
+      taskRef:
+        name: kaniko
+      runAfter:
+        - "git-clone"
+      params:
+        - name: IMAGE
+          value: "$(params.image-name)"
+        - name: CONTEXT
+          value: ""
+        - name: DOCKERFILE
+          value: "Dockerfile"
+      workspaces:
+        - name: source
+          workspace: go-build-workspace
+    - name: clean
+      taskRef:
+        name: clean
+      runAfter:
+        - "build-push-image"
+      workspaces:
+        - name: output
+          workspace: go-build-workspace

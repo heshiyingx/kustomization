@@ -1,0 +1,47 @@
+# https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tekton-git-harbor-sa
+  # namespace: kube-devops
+secrets:
+  - name: myshuju-gitlab-auth
+  - name: myshuju-harbor-auth
+---
+# https://kubernetes.io/docs/concepts/configuration/secret/
+apiVersion: v1
+kind: Secret
+metadata:
+  name: myshuju-gitlab-auth
+  # namespace: kube-devops
+  annotations:
+    tekton.dev/git-0: https://gitlab.myshuju.top
+type: kubernetes.io/basic-auth
+stringData:
+  username: devops
+  password: Asdqwe123@
+---
+# https://kubernetes.io/docs/concepts/configuration/secret/
+apiVersion: v1
+kind: Secret
+metadata:
+  name: myshuju-harbor-auth
+  annotations:
+    tekton.dev/docker-0: https://harbor.myshuju.top # Described below
+type: kubernetes.io/basic-auth
+stringData:
+  username: devops
+  password: Asdqwe123
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tekton-clusterrole-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: edit
+subjects:
+  - kind: ServiceAccount
+    name: tekton-git-harbor-sa
+    namespace: default
