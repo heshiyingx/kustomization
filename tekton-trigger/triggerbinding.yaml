@@ -7,7 +7,7 @@ spec:
     - name: git-url
       value: $(body.repository.homepage)
     - name: revision
-      value: master
+      value: $(body.checkout_sha)
     - name: image-name
       value: harbor.myshuju.top/$(body.project.namespace)/$(body.project.name)
     - name: ref

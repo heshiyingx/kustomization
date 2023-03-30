@@ -43,3 +43,8 @@ spec:
                   requests:
                     storage: 1Gi
                 volumeMode: Filesystem
+        # taskRunSpecs:
+        #   - pipelineTaskName: build-push-image
+        #     computeResources:
+        #       requests:
+        #         cpu: 4

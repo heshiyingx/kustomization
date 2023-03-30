@@ -52,6 +52,10 @@ spec:
         - --context=$(workspaces.source.path)/$(params.CONTEXT) # The user does not need to care the workspace and the source.
         - --destination=$(params.IMAGE)
         - --digest-file=$(results.IMAGE_DIGEST.path)
+      # resources:
+      #   requests:
+      #     memory: 1Gi
+      #     cpu: 2
       # kaniko assumes it is running as root, which means this example fails on platforms
       # that default to run containers as random uid (like OpenShift). Adding this securityContext
       # makes it explicit that it needs to run as root.
@@ -310,6 +314,30 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
+  name: go-build
+spec:
+  # params:
+  workspaces:
+    - name: source
+      description: The git repo will be cloned onto the volume backing this Workspace.
+  steps:
+    - name: build-sources
+      image: golang:1.19
+      workingDir: /workspace/source
+      script: |
+        go env -w GOPROXY="https://goproxy.cn,direct" && go mod download && \
+        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o app main.go
+      resources:
+        requests:
+          memory: 1Gi
+          cpu: 2
+        limits:
+          memory: 2Gi
+          cpu: 4
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
   name: git-tag
 spec:
   params:
@@ -318,6 +346,8 @@ spec:
   results:
     - name: tag
       description: tag值
+    - name: exists
+      description: tag是否存在
   steps:
     - name: build-sources
       env:
@@ -329,6 +359,9 @@ spec:
         set -x
         tag=`echo $GITREF | sed 's#refs/tags/\(.*\)#\1#g'`
         echo $tag | tr -d "\n"| tee $(results.tag.path)
+        if [[ -n "$tag" ]];then
+          echo yes | tr -d "\n"| tee $(results.exists.path)
+        fi
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task

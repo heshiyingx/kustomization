@@ -2,6 +2,8 @@ apiVersion: triggers.tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: gitlab-listener
+  annotations:
+    "pipeline.tekton.dev/ttlSecondsAfterFinished": "30"
 spec:
   serviceAccountName: tekton-git-harbor-sa
   triggers:
@@ -17,6 +19,12 @@ spec:
                 secretKey: secretToken
             - name: "eventTypes"
               value: ["Tag Push Hook"]
+        - ref:
+            name: cel
+          params:
+            - name: filter
+              value: body.checkout_sha != null
+
       bindings:
         - ref: gobuild-binding-tb
       template:
