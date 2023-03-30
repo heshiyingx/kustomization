@@ -2,3 +2,5 @@ resources:
   - "interceptors-v0.23.0.yaml"
   - "pipeline-v0.46.0.yaml"
   - "trigger-v0.23.0.yaml"
+  - "tekton-dashboard-release-full.yaml"
+  - "tekton-dashboard-ingress.yaml"

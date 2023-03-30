@@ -20,7 +20,7 @@ spec:
         annotations:
           "pipeline.tekton.dev/ttlSecondsAfterFinished": "30"
       spec:
-        serviceAccountName: tekton-git-harbor-sa
+        serviceAccountName: tekton-git-harbor-sa # beta版本在这里设置
         pipelineRef:
           name: go-build-image
         params:

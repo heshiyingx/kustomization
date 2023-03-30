@@ -2,6 +2,8 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: go-build-image
+  annotations:
+    "pipeline.tekton.dev/ttlSecondsAfterFinished": "30"
 spec:
   params:
     - name: git-url # 默认string类型，所以不用指定type

@@ -1,0 +1,9 @@
+resources:
+  - "task.yaml"
+  - "rbac.yaml"
+  - "pipline.yaml"
+  - "triggerbinding.yaml"
+  - "triggertemplate.yaml"
+  - "enventlistener.yaml"
+  - "ingress.yaml"
+  - "service.yaml"
