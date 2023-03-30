@@ -5,8 +5,9 @@ metadata:
 spec:
   params:
     - name: git-url # 默认string类型，所以不用指定type
-    - name: git-version
+    - name: revision
     - name: image-name
+    - name: ref
     # - name: dockerfilePath
   workspaces:
     - name: go-build-workspace
@@ -18,18 +19,29 @@ spec:
         - name: url
           value: $(params.git-url)
         - name: revision
-          value: $(params.git-version)
+          value: $(params.revision)
       workspaces:
         - name: output
           workspace: go-build-workspace
+    - name: git-tag
+      taskRef:
+        name: git-tag
+      params:
+        - name: ref
+          value: "$(params.ref)"
     - name: build-push-image
+      # when:
+      #   - input: "$(tasks.git-tag.results.tag)"
+      #     operator: in
+      #     values: ["yes"]
       taskRef:
         name: kaniko
       runAfter:
         - "git-clone"
+        - git-tag
       params:
         - name: IMAGE
-          value: "$(params.image-name)"
+          value: "$(params.image-name):$(tasks.git-tag.results.tag)"
         - name: CONTEXT
           value: ""
         - name: DOCKERFILE

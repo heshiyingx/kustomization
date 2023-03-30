@@ -237,6 +237,7 @@ spec:
       script: |
         #!/usr/bin/env sh
         set -eu
+        # sleep 1000
         if [ "${PARAM_VERBOSE}" = "true" ] ; then
           set -x
         fi
@@ -305,6 +306,29 @@ spec:
         printf "%s" "${RESULT_COMMITTER_DATE}" > "$(results.committer-date.path)"
         printf "%s" "${RESULT_SHA}" > "$(results.commit.path)"
         printf "%s" "${PARAM_URL}" > "$(results.url.path)"
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: git-tag
+spec:
+  params:
+    - name: ref
+      description: gitlab webhook中的ref字段
+  results:
+    - name: tag
+      description: tag值
+  steps:
+    - name: build-sources
+      env:
+        - name: GITREF
+          value: $(params.ref)
+      image: busybox:1.34
+      script: |
+        #!/usr/bin/env sh
+        set -x
+        tag=`echo $GITREF | sed 's#refs/tags/\(.*\)#\1#g'`
+        echo $tag | tr -d "\n"| tee $(results.tag.path)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task

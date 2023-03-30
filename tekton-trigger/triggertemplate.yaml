@@ -1,0 +1,45 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: gobuild-tt
+spec:
+  params:
+    - name: git-url # 默认string类型，所以不用指定type
+      description: 代码仓库地址
+    - name: revision
+      description: 拉取的版本
+    - name: image-name
+      description: 镜像名称
+    - name: ref
+      description: tagref
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: gobuild-image-pr-
+        annotations:
+          "pipeline.tekton.dev/ttlSecondsAfterFinished": "30"
+      spec:
+        serviceAccountName: tekton-git-harbor-sa
+        pipelineRef:
+          name: go-build-image
+        params:
+          - name: git-url # 默认string类型，所以不用指定type
+            value: $(tt.params.git-url)
+          - name: revision
+            value: $(tt.params.revision)
+          - name: image-name
+            value: $(tt.params.image-name)
+          - name: ref
+            value: $(tt.params.ref)
+        workspaces:
+          - name: go-build-workspace
+            # emptyDir: {}
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Gi
+                volumeMode: Filesystem

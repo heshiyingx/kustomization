@@ -1,8 +1,8 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  # generateName: go-build-image-run-
-  name: go-build-image-run
+  # generateName: gobuild-image-pr-
+  name: gobuild-image-pr
 spec:
   serviceAccountName: tekton-git-harbor-sa
   pipelineRef:
@@ -10,7 +10,7 @@ spec:
   params:
     - name: git-url
       value: https://gitlab.myshuju.top/goproject/user
-    - name: git-version
+    - name: revision
       value: master
     - name: image-name
       value: harbor.myshuju.top/public/xxad:v0.1.5

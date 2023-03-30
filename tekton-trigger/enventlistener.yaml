@@ -1,0 +1,33 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: gitlab-listener
+spec:
+  serviceAccountName: tekton-git-harbor-sa
+  triggers:
+    - name: triggerName
+      serviceAccountName: tekton-git-harbor-sa
+      interceptors:
+        - ref:
+            name: "gitlab"
+          params:
+            - name: "secretRef"
+              value:
+                secretName: gitlab-webhook-secret
+                secretKey: secretToken
+            - name: "eventTypes"
+              value: ["Tag Push Hook"]
+      bindings:
+        - ref: gobuild-binding-tb
+      template:
+        ref: gobuild-tt
+---
+# https://kubernetes.io/docs/concepts/configuration/secret/
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gitlab-webhook-secret
+type: Opaque
+stringData:
+  secretToken: "12345678"
+---

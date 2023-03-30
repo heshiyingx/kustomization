@@ -1,0 +1,14 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: gobuild-binding-tb
+spec:
+  params:
+    - name: git-url
+      value: $(body.repository.homepage)
+    - name: revision
+      value: master
+    - name: image-name
+      value: harbor.myshuju.top/$(body.project.namespace)/$(body.project.name)
+    - name: ref
+      value: $(body.ref)
