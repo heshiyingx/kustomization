@@ -1,3 +1,4 @@
+# kaniko(build image)
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
@@ -68,6 +69,7 @@ spec:
         image="$(params.IMAGE)"
         echo -n "${image}" | tee "$(results.IMAGE_URL.path)"
 ---
+# git-clone
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
@@ -311,6 +313,7 @@ spec:
         printf "%s" "${RESULT_SHA}" > "$(results.commit.path)"
         printf "%s" "${PARAM_URL}" > "$(results.url.path)"
 ---
+# go-build
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
@@ -326,7 +329,7 @@ spec:
       workingDir: /workspace/source
       script: |
         go env -w GOPROXY="https://goproxy.cn,direct" && go mod download && \
-        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o app main.go
+        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o app cmd/main.go
       resources:
         requests:
           memory: 1Gi
@@ -335,6 +338,7 @@ spec:
           memory: 2Gi
           cpu: 4
 ---
+# git-tag
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
@@ -363,6 +367,7 @@ spec:
           echo yes | tr -d "\n"| tee $(results.exists.path)
         fi
 ---
+# clean
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
