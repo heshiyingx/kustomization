@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argo-server
+  namespace: argocd
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: argocd.myshuju.top
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: argocd-server
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server-grpc
+  namespace: argocd
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: argocd-server
+                port:
+                  name: https
+      host: grpc.argocd.myshuju.top
+  tls:
+    - hosts:
+        - grpc.argocd.myshuju.top
+      secretName: argocd-secret # do not change, this is provided by Argo CD

@@ -1,0 +1,6 @@
+namespace: argocd
+resources:
+  - "argo-cd2.6.7.yaml"
+  - "ns.yaml"
+patchesStrategicMerge:
+  - "insecure.yaml"
