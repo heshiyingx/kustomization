@@ -7,7 +7,7 @@ metadata:
   # replace with namespace where provisioner is deployed
   namespace: default
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     type: Recreate
   selector:
@@ -28,12 +28,12 @@ spec:
           env:
             - name: PROVISIONER_NAME
               value: k8s-sigs.io/nfs-subdir-external-provisioner
-            # - name: NFS_SERVER
-            #   value: 192.168.158.36 #nfs server地址
-            # - name: NFS_PATH
-            #   value: /nfs_share #nfs server共享目录
+            - name: NFS_SERVER
+              value: 192.168.158.36 #nfs server地址
+            - name: NFS_PATH
+              value: /nfs_share #nfs server共享目录
       volumes:
-        # - name: nfs-client-root
-        #   nfs:
-        #     server: 192.168.158.36 #nfs server地址
-        #     path: /nfs_share #nfs server共享目录
+        - name: nfs-client-root
+          nfs:
+            server: 192.168.158.36 #nfs server地址
+            path: /nfs_share #nfs server共享目录

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolume						# 类型为PersistentVolume(pv)
+metadata:
+  name: pv-nfs								# 名称
+spec:
+  capacity:
+    storage: 1Gi							# 大小
+  accessModes:
+    - ReadWriteMany							# 访问模式
+  nfs:
+    path: /data/nfs							# nfs共享目录
+    server: 192.168.158.36

@@ -39,7 +39,7 @@ spec:
       workspaces:
         - name: source
           workspace: go-build-workspace
-    - name: build-push-image
+    - name: docker-build-push
       when:
         - input: "$(tasks.git-tag.results.exists)"
           operator: in
@@ -48,7 +48,7 @@ spec:
         name: kaniko
       runAfter:
         - "go-build"
-        - git-tag
+        - "git-tag"
       params:
         - name: IMAGE
           value: "$(params.image-name):$(tasks.git-tag.results.tag)"
@@ -63,7 +63,7 @@ spec:
       taskRef:
         name: clean
       runAfter:
-        - "build-push-image"
+        - "docker-build-push"
       workspaces:
         - name: output
           workspace: go-build-workspace

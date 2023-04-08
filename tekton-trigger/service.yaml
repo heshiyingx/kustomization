@@ -4,6 +4,7 @@ kind: Service
 metadata:
   name: elgitlab
   namespace: default
+  
 spec:
   selector:
     app.kubernetes.io/managed-by: EventListener
